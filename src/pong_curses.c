@@ -39,14 +39,13 @@ int main() {
     printf("For quit press 'Q' or 'q'\n");
     printf("If Score = 10 payer = winner\n");
     printf("For start please wait");
+    usleep(3000000);
+    printf("\033[0d\033[2J");
 
     initscr();
     nodelay(stdscr, TRUE);
-    usleep(3000000);
-    printf("\033[0d\033[2J");
     if (key(i, j, pozition1, pozition2, score1, score2, bollposy, bollposx, bollspeedx, bollspeedy, q) == 1)
         printf("Bye !\n");
-    // usleep(delay);
     nodelay(stdscr, FALSE);
     refresh();
     endwin();
@@ -72,10 +71,16 @@ int key(int i, int j, int pozition1, int pozition2, int score1, int score2, int 
     } else if (key == 'Q' || key == 'q')
         return 1;
     else if (q == 1) {
+        printf("\033[0d\033[2J");
+        printf("\033[1;32m");
         printf("Left payer win !!!\n");
+        usleep(3000000);
         return 1;
     } else if (q == 2) {
+        printf("\033[0d\033[2J");
+        printf("\033[1;32m");
         printf("Right payer win !!!\n");
+        usleep(3000000);
         return 1;
     }
     core(i, j, pozition1, pozition2, score1, score2, bollposy, bollposx, bollspeedx, bollspeedy, q);
@@ -86,7 +91,7 @@ int key(int i, int j, int pozition1, int pozition2, int score1, int score2, int 
 void prfild(int i, int j, int pozition1, int pozition2, int score1, int score2, int bollposy, int bollposx,
             int bollspeedx, int bollspeedy, int q) {
     clear();
-    usleep(1000);
+    usleep(50000);
     printw("\nSCORE:                              %2d  || %2d\n", score1, score2);
     printw(
         "-----------------------------------------------------------------------"
