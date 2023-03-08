@@ -23,38 +23,32 @@ int main() {
     int bollspeedy = 1;
     int bollspeedx = 1;
     int q = 0;
-    int quit = 0;
 
     printf("\033[0d\033[2J");
     printf("\033[1;32m");
-    printf(
-        "-----------------------------------------------------------------------"
-        "-----------\n");
+    printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
     printf("\n                                    PONG GAME\n\n");
     printf(
-        "-----------------------------------------------------------------------"
-        "-----------\n");
-    printf("This game is an imitation of the Ping Pong game\n");
+        "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+        "\n");
+    printf("> This game is an imitation of the Ping Pong game\n");
     printf(
-        "Control buttons are: \n'M' 'K' ore 'm' 'k' for right player\n'A' 'Z' ore 'a' 'z' for left player\n");
-    printf("For quit press 'Q' or 'q'\n");
-    printf("If Score = 10 payer = winner\n");
+        "> Control buttons are: \n> 'M' 'K' ore 'm' 'k' for right player\n> 'A' 'Z' ore 'a' 'z' for left "
+        "player\n");
+    printf("> For quit press 'Q' or 'q'\n");
+    printf("> If Score = 10 payer = winner\n");
     printf("For start please wait\n");
     usleep(3000000);
     printf("\033[0d\033[2J");
+
     initscr();
     nodelay(stdscr, TRUE);
-    quit = key(i, j, pozition1, pozition2, score1, score2, bollposy, bollposx, bollspeedx, bollspeedy, q);
+    if (key(i, j, pozition1, pozition2, score1, score2, bollposy, bollposx, bollspeedx, bollspeedy, q) == 1)
+        printw("Bye !\n");
     nodelay(stdscr, FALSE);
     refresh();
     endwin();
-    printf(
-        "-----------------------------------------------------------------------"
-        "-----------\n");
-    printf("\n                                    BYE !\n\n");
-    printf(
-        "-----------------------------------------------------------------------"
-        "-----------\n");
+
     return 0;
 }
 
@@ -73,16 +67,23 @@ int key(int i, int j, int pozition1, int pozition2, int score1, int score2, int 
         if (pozition2 <= 23) pozition2++;
     } else if (key == 'K' || key == 'k') {
         if (pozition2 >= 1) pozition2--;
-    } else if (key == 'Q' || key == 'q') {
-        q = 1;
-        return q;
+    } else if (key == 'Q' || key == 'q')
+        return 1;
+    else if (q == 1) {
+        printf("\033[0d\033[2J");
+        printf("\033[1;32m");
+        printf("Left payer win !!!\n");
+        usleep(3000000);
+        return 1;
     } else if (q == 2) {
-        return q;
-    } else if (q == 3) {
-        return q;
+        printf("\033[0d\033[2J");
+        printf("\033[1;32m");
+        printf("Right payer win !!!\n");
+        usleep(3000000);
+        return 1;
     }
     core(i, j, pozition1, pozition2, score1, score2, bollposy, bollposx, bollspeedx, bollspeedy, q);
-    return q;
+    return 0;
 }
 
 // Функция вывода поля, так как по заданию нельзя использовать массивы, реализована циклами и ncurses выводом
@@ -151,9 +152,9 @@ void core(int i, int j, int pozition1, int pozition2, int score1, int score2, in
         bollposy = pozition2;
         score1 += 1;
     } else if (score2 == 10)
-        q = 3;
-    else if (score1 == 10)
         q = 2;
+    else if (score1 == 10)
+        q = 1;
 
     prfild(i, j, pozition1, pozition2, score1, score2, bollposy, bollposx, bollspeedx, bollspeedy, q);
 }

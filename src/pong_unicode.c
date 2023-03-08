@@ -1,7 +1,4 @@
-#include <ncurses.h>
 #include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
 
 int key(int i, int j, int pozition1, int pozition2, int score1, int score2, int bollposy, int bollposx,
         int bollspeedx, int bollspeedy, int q);
@@ -23,48 +20,32 @@ int main() {
     int bollspeedy = 1;
     int bollspeedx = 1;
     int q = 0;
-    int quit = 0;
 
+    // Вывод приветствия в самом начале, без выбора, по этому просто фризится через юслип
     printf("\033[0d\033[2J");
     printf("\033[1;32m");
-    printf(
-        "-----------------------------------------------------------------------"
-        "-----------\n");
+    printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
     printf("\n                                    PONG GAME\n\n");
     printf(
-        "-----------------------------------------------------------------------"
-        "-----------\n");
-    printf("This game is an imitation of the Ping Pong game\n");
+        "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+        "\n");
+    printf("> This game is an imitation of the Ping Pong game\n");
     printf(
-        "Control buttons are: \n'M' 'K' ore 'm' 'k' for right player\n'A' 'Z' ore 'a' 'z' for left player\n");
-    printf("For quit press 'Q' or 'q'\n");
-    printf("If Score = 10 payer = winner\n");
-    printf("For start please wait\n");
-    usleep(3000000);
-    printf("\033[0d\033[2J");
-    initscr();
-    nodelay(stdscr, TRUE);
-    quit = key(i, j, pozition1, pozition2, score1, score2, bollposy, bollposx, bollspeedx, bollspeedy, q);
-    nodelay(stdscr, FALSE);
-    refresh();
-    endwin();
-    printf(
-        "-----------------------------------------------------------------------"
-        "-----------\n");
-    printf("\n                                    BYE !\n\n");
-    printf(
-        "-----------------------------------------------------------------------"
-        "-----------\n");
+        "> Control buttons are: \n> 'M' 'K' ore 'm' 'k' for right player\n> 'A' 'Z' ore 'a' 'z' for left "
+        "player\n");
+    printf("> For quit press 'Q' or 'q'\n");
+    printf("> If Score = 10 payer = winner\n");
+    printf("For start press 'Enter'\n");
+    if (key(i, j, pozition1, pozition2, score1, score2, bollposy, bollposx, bollspeedx, bollspeedy, q) == 1)
+        printf("Bye !\n");
+
     return 0;
 }
 
-// функция управления, реализована через ncurses не ожидает нажатия энтер
+// функция управления, реализована через stdi по этому ожидает нажатия энтр
 int key(int i, int j, int pozition1, int pozition2, int score1, int score2, int bollposy, int bollposx,
         int bollspeedx, int bollspeedy, int q) {
-    start_color();
-    init_pair(1, COLOR_GREEN, COLOR_BLACK);
-    attron(COLOR_PAIR(1));
-    char key = getch();
+    char key = getchar();
     if (key == 'A' || key == 'a') {
         if (pozition1 >= 1) pozition1--;
     } else if (key == 'Z' || key == 'z') {
@@ -73,55 +54,48 @@ int key(int i, int j, int pozition1, int pozition2, int score1, int score2, int 
         if (pozition2 <= 23) pozition2++;
     } else if (key == 'K' || key == 'k') {
         if (pozition2 >= 1) pozition2--;
-    } else if (key == 'Q' || key == 'q') {
-        q = 1;
-        return q;
+    } else if (key == 'Q' || key == 'q')
+        return 1;
+    else if (q == 1) {
+        printf("Left payer win !!!\n");
+        return 1;
     } else if (q == 2) {
-        return q;
-    } else if (q == 3) {
-        return q;
+        printf("Right payer win !!!\n");
+        return 1;
     }
     core(i, j, pozition1, pozition2, score1, score2, bollposy, bollposx, bollspeedx, bollspeedy, q);
-    return q;
+    return 0;
 }
 
-// Функция вывода поля, так как по заданию нельзя использовать массивы, реализована циклами и ncurses выводом
+// Функция вывода поля, так как по заданию нельзя использовать массивы, реализована циклами и stdo
 void prfild(int i, int j, int pozition1, int pozition2, int score1, int score2, int bollposy, int bollposx,
             int bollspeedx, int bollspeedy, int q) {
-    clear();
-    usleep(50000);
-    printw("\nSCORE:                              %2d  || %2d\n", score1, score2);
-    printw(
-        "-----------------------------------------------------------------------"
-        "-----------\n");
+    printf("\033[0d\033[2J");
+    printf("\nSCORE:                              %2d  ┋┋ %2d\n", score1, score2);
+    printf("┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓\n");
 
     for (i = 0; i < 25; i++) {
-        printw("|");
+        printf("┃");
         for (j = 0; j < 80; j++) {
             if ((i == pozition1 && j == 0) || (i == pozition1 + 1 && j == 0) ||
                 (i == pozition1 - 1 && j == 0))
-                printw("|");
+                printf("┃");
             else if ((i == pozition2 && j == 79) || (i == pozition2 + 1 && j == 79) ||
                      (i == pozition2 - 1 && j == 79))
-                printw("|");
+                printf("┃");
             else if (i == bollposy && j == bollposx)
-                printw("@");
+                printf("●");
             else if (j == 39)
-                printw(":");
+                printf("┋");
             else if (j == 40)
-                printw(":");
+                printf("┋");
             else {
-                printw(" ");
+                printf(" ");
             }
         }
-
-        printw("|\n");
+        printf("┃\n");
     }
-    printw(
-        "-----------------------------------------------------------------------"
-        "-----------\n");
-    attroff(COLOR_PAIR(1));
-    refresh();
+    printf("┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛\n");
     key(i, j, pozition1, pozition2, score1, score2, bollposy, bollposx, bollspeedx, bollspeedy, q);
 }
 
@@ -151,9 +125,9 @@ void core(int i, int j, int pozition1, int pozition2, int score1, int score2, in
         bollposy = pozition2;
         score1 += 1;
     } else if (score2 == 10)
-        q = 3;
-    else if (score1 == 10)
         q = 2;
+    else if (score1 == 10)
+        q = 1;
 
     prfild(i, j, pozition1, pozition2, score1, score2, bollposy, bollposx, bollspeedx, bollspeedy, q);
 }
