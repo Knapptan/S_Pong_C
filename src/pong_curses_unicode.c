@@ -91,36 +91,31 @@ void prfild(int i, int j, int pozition1, int pozition2, int score1, int score2, 
             int bollspeedx, int bollspeedy, int q) {
     clear();
     usleep(50000);
-    printw("\nSCORE:                              %2d  || %2d\n", score1, score2);
-    printw(
-        "-----------------------------------------------------------------------"
-        "-----------\n");
+    printw("\nSCORE:                              %2d  ┋┋ %2d\n", score1, score2);
+    printw("┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓\n");
 
     for (i = 0; i < 25; i++) {
-        printw("|");
+        printw("┃");
         for (j = 0; j < 80; j++) {
             if ((i == pozition1 && j == 0) || (i == pozition1 + 1 && j == 0) ||
                 (i == pozition1 - 1 && j == 0))
-                printw("|");
+                printw("┃");
             else if ((i == pozition2 && j == 79) || (i == pozition2 + 1 && j == 79) ||
                      (i == pozition2 - 1 && j == 79))
-                printw("|");
+                printw("┃");
             else if (i == bollposy && j == bollposx)
-                printw("@");
+                printw("●");
             else if (j == 39)
-                printw(":");
+                printw("┋");
             else if (j == 40)
-                printw(":");
+                printw("┋");
             else {
                 printw(" ");
             }
         }
-
-        printw("|\n");
+        printw("┃\n");
     }
-    printw(
-        "-----------------------------------------------------------------------"
-        "-----------\n");
+    printw("┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛\n");
     attroff(COLOR_PAIR(1));
     refresh();
     key(i, j, pozition1, pozition2, score1, score2, bollposy, bollposx, bollspeedx, bollspeedy, q);
